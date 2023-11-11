@@ -19,8 +19,8 @@ jobs:
         run: |
           cd test_submodule
           SUBMODULE_COMMIT=$(git rev-parse HEAD)
-          LATEST_COMMIT=$(git ls-remote origin -h refs/heads/main | cut -f1)
+          LATEST_COMMIT=$(git ls-remote origin -h refs/heads/develop | cut -f1)
           if [ "$SUBMODULE_COMMIT" != "$LATEST_COMMIT" ]; then
-            echo "Submodule is not up to date with the latest commit on main."
+            echo "Submodule is not up to date with the latest commit on develop."
             exit 1
           fi
