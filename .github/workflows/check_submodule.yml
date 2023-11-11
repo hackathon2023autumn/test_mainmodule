@@ -1,0 +1,26 @@
+name: Check Submodule
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: "recursive"
+          token: ${{ secrets.TEST_MAINMODULE }}
+
+      - name: Check if submodule is up to date
+        run: |
+          cd test_submodule
+          SUBMODULE_COMMIT=$(git rev-parse HEAD)
+          LATEST_COMMIT=$(git ls-remote origin -h refs/heads/main | cut -f1)
+          if [ "$SUBMODULE_COMMIT" != "$LATEST_COMMIT" ]; then
+            echo "Submodule is not up to date with the latest commit on main."
+            exit 1
+          fi
